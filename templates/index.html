@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Nv Trip</title>
+    <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'icons/bootstrap-icons.css' %}" />
+    <link rel="stylesheet" href="{% static 'box_icons/css/materialdesignicons.min.css' %}" />
+  <link rel="icon" href="{% static 'logo/logo.ico' %}"/>
+    
+
+    {% block style %}
+    {% endblock style %}
+  </head>
+  <body>
+    {% include 'navbar.html' %} {% block content %}
+    <div class="px-4 py-5 my-5 text-center">
+      <img
+        class="d-block mx-auto mb-4"
+        src="{% static 'logo/car.png' %}"
+        alt=""
+        width="25%"
+        height="25%"
+      />
+      <h1 class="display-5 fw-bold">Nv Trip Advisor</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">
+          Nv Trip Advisor Permit your to find the route between two places, book
+          a place in a vehicle And Help Your determine the wheather, search the
+          different point of interrest such as hotels,stores,shools ,etc...
+          arround you
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 gap-3"
+            >Login</a
+          >
+          <a
+            href="{% url 'register' %}"
+            class="btn btn-outline-secondary btn-lg px-4"
+            >Register</a
+          >
+        </div>
+      </div>
+    </div>
+
+    {% endblock content%} 
+    {% include 'footer.html' %} 
+    {% block script %} {% endblock script %}
+    <script
+      type="text/javascript"
+      src="{% static 'boot/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script>
+      {% if user.is_authenticated %}
+        var loc = window.location;
+      var status = 'online';
+      
+      var wsStart = 'ws://'+window.location.host+'/user/';
+      
+      if(loc.protocole == 'https:'){
+        wsStart = 'wss://'+window.location.host+'/user/';
+      }
+      var endpoint = wsStart;
+      
+      var socket = new WebSocket(endpoint);
+      socket.onmessage = (e) =>{
+        {% comment %} console.log('message ',e); {% endcomment %}
+      }
+      socket.onopen= (e) =>{
+        {% comment %} console.log('open ',e); {% endcomment %}
+        status = 'online';
+        socket.send(status)
+      }
+      socket.onerror= (e) =>{
+        {% comment %} console.log('error ',e); {% endcomment %}
+      }
+      socket.onclose= (e) =>{
+        status = 'offline'; 
+        socket.send(status);
+        {% comment %} console.log('close ',e); {% endcomment %}
+      }
+      
+      function sendOnline(){
+        status = 'online';
+        socket.send(status)
+      }
+
+
+      setInterval(sendOnline,1000);
+
+      var unnotifws = wsStart = 'ws://'+window.location.host+'/usernotifications/{{user.id}}/';
+      var notificationWs = new WebSocket(unnotifws);
+      var notifcount = 0
+      notificationWs.onopen = (e)=>{
+        console.log(e)
+      }
+      notificationWs.onmessage = (e)=>{
+        notifcount +=1;
+        document.querySelector('#msg').innerText = notifcount;
+      }
+      {% endif %}
+      {% comment %} var interval = setInterval(sendOnline,2000); {% endcomment %}
+    </script>
+  </body>
+</html>

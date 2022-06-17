@@ -1,0 +1,39 @@
+
+<script type="text/javascript">
+    let loc_ = window.location;
+    var driverStatus = 'online';
+
+    var wsStart = 'ws://' + window.location.host + '/vehicle/{{drive.vehicle.id}}/';
+
+    if (loc_.protocole == 'https:') {
+        wsStart = 'wss://' + window.location.host + '/vehicle/{{drive.vehicle.id}}/';
+    }
+    var driverEndPoint = wsStart;
+
+    var driverSocket = new WebSocket(driverEndPoint);
+
+    driverSocket.onopen = (e) => {
+        driverStatus = 'online';
+        driverSocket.send(driverStatus);
+    }
+
+    driverSocket.onerror = (e) => {
+
+    }
+
+    driverSocket.onclose = (e) => {
+        driverStatus = 'offline';
+        driverSocket.send(driverStatus);
+    }
+
+    driverSocket.onmessage = (e) => {
+        console.log('The message recieve is :' + e);
+    }
+
+    function sendOnlineStatus() {
+        driverStatus = 'online';
+        driverSocket.send(driverStatus);
+    }
+
+    setInterval(sendOnlineStatus, 2000);
+</script>

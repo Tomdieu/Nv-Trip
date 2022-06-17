@@ -1,0 +1,148 @@
+{% extends 'base.html' %} {% load static %} {% block style %}
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+{% include 'driver/stylesheet.html' %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/autocomplete.css' %}" />
+
+{% endblock style %} 
+{% block content %}
+<main class="to-abs no-margin">
+    <div class="row no-margin" style="position: relative; height: 100%; width: 100%">
+        <div id="left" class="col-sm-12 col-md-3 no-margin">
+            <div class="container">
+                <div>
+                    <small style="font-size: 1.1em;font-weight: bolder;font-family: serif;">Driver :
+                        {{request.user}}</small>
+                    <div>
+                        <label>From</label>
+                        <span class="form-control ">{{drive.origin}}</span>
+
+                    </div>
+                    <div>
+                        <label>To</label>
+                        <span class="form-control ">{{drive.destination}}</span>
+                    </div>
+                    <div>
+                        <label>Using</label>
+                        <span class="form-control ">{{drive}}</span>
+                    </div>
+                    <div class='mt-1'>
+
+                        <button onclick="showModal();" class="btn btn-outline-primary form-control">
+                            update</button>
+
+                    </div>
+                    <div class="mt-1" style="display: flex;justify-content: end;align-items: center;">
+                        <button onclick="goBack();" class="btn btn-outline-danger form-control">
+                            Back</button>
+                        <span style="width: 10px;"></span>
+                        <button type="submit" class="btn btn-outline-success form-control">Start Naigation</button>
+                    </div>
+                </div>
+                <br />
+                <div class="" style="background-color: none;">
+                    <div class="tab_box">
+                        <button class="tab_btn active to-rel">Instructions</button>
+                        <button class="tab_btn to-rel">
+                            <span>Notifications</span>
+                            <span class="btn_badge" id='notifications_count'>{{count}}</span>
+                        </button>
+                        <div class="line"></div>
+                    </div>
+                    <div class="content_box">
+                        <div class="content active">
+                            <h3>instructions</h3>
+                            <div>
+                                <span id="distance"></span><br>
+                                <span id="time"></span>
+                            </div>
+                            <div id="instructions">
+
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h3>Notifications</h3>
+                            <div id="notifications">
+                                {% for notif in notifications %}
+                                <div class="shadow p-3">
+                                    {{notif.msg}}
+                                    <div id='book_{{notif.sender.id}}' style="display:flex;justify-content: space-between;align-items: center;">
+                                        {% if notif.accepted == True %}
+                                            <span>Accepted</span>
+                                        {% else %}
+                                        <button class='btn btn-outline-success' onclick="acceptBook({{notif.sender.user.id}},{{notif.sender.id}},{{drive.vehicle.id}},{{notif.id}})">Accept</button>
+                                        <button class='btn btn-outline-danger'>Refuse</button>
+                                        {% endif %}    
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="right" class="col-sm-12 col-md-9 no-margin">
+            <div id="map">
+            </div>
+            <div style="margin:8px;display:flex;padding:9px;z-index:2000;position:absolute;bottom:20px;width:200px;flex-direction:column">
+                <div>Max Places : <span>{{vehicle.max_place}}</span></div><br />
+                <div>Available Places : <span id='curr_plac1'>{{vehicle.nbp}}</span></div>
+                <div id="btn_ctrl" style="display: flex;">
+                    <button id='btn_dec_plac' class="btn btn-outline-primary">&minus;</button>
+                    <input id="curr_plac" value="{{vehicle.nbp}}" disabled />
+                    <button id='btn_incr_plac' class="btn btn-outline-primary">&plus;</button></div>
+
+            </div>
+        </div>
+    </div>
+    {% if error %}
+    <div class="alert alert-secondary" id='no_internet' style="align-items: center;position: absolute;bottom: 10px;right: 10px;z-index: 999;">
+        <p>{{connect}}!</p>
+        <div style="display: flex;justify-content: space-between;">
+            <button onclick="location.reload(true);" class="btn btn-ouline-primary"><i
+                    class="bi bi-arrow-counterclockwise"></i>Reload</button>
+            <button type="button" class="btn-close" data-bs-dismiss='alert' data-bs-target='#no_internet' aria-label='Close'></button>
+        </div>
+    </div>
+    {% endif %}
+    <div class='modal'>
+        <div class='modal-content animatezoom'>
+            <div>
+                {% csrf_token %}
+                <h1 align='center'>Update</h1>
+                <div id='origin'></div>
+                <div id='destination'></div>
+                <div>
+                    <label>Vehicle</label>
+                    <select name='vehicle_id' class='form-select'>
+                        {% for veh in driver_vehicles %}
+                        <option value='{{veh.id}}'
+                            {% if veh.driver_plate_number == drive.vehicle.driver_plate_number %}selected=""
+                            {% endif %}>{{veh}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class='mt-2' style="display: flex;justify-content: end;align-items: center;">
+                    <button onclick="closeModal()" class="btn btn-outline-danger form-control">
+                        Close</button>
+                    <span style="width: 10px;"></span>
+                    <button id="submit" class="btn btn-outline-success form-control">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content%} {% block script %}
+
+{% include 'driver/recieve_notification.html' %}
+{% include 'driver/update_place.html' %}
+{% include 'driver/update_driving.html' %}
+{% include 'driver/send_online.html' %}
+{% include 'driver/driver_send_notification.html' %}
+{% include 'driver/driver_script.html' %}
+{% comment %}
+<script type="text/javascript" src="{% static 'js/path/path.js' %}"></script> {% endcomment %}
+
+{% endblock script %}

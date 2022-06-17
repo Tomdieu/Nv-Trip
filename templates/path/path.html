@@ -1,0 +1,184 @@
+{% extends 'base.html' %} {% load static %} 
+{% block style %}
+<style type="text/css">
+  * {
+    box-sizing: border-box;
+  }
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    max-height: 100vh;
+    max-width: 100vw;
+  }
+  .to-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .to-abs {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  .icons .bi {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  body {
+    max-height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
+  #map {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: blanchedalmond;
+  }
+  .no-margin {
+    padding: 0;
+    margin: 0;
+  }
+  #instructions{
+    max-height:370px;
+    overflow-y:auto;
+  }
+  #instructions p{
+    padding:9px;
+    margin:0;
+    border-radius:0px;
+    background-color:#3f4953;
+    color:#fff;
+  }
+  #instructions p:hover{
+    background:#000;
+    color:#fff;
+  }
+  {% comment %} .yu{
+    position:absolute;
+    right:5px;
+    bottom:5px;
+    width:20px;
+    top:30px;
+    z-index:99;
+  } {% endcomment %}
+</style>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/autocomplete.css' %}"
+/>
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+
+ {% endblock style %} 
+ {% block content %}
+<main class="to-abs no-margin">
+  <div
+    class="row no-margin"
+    style="position: relative; height: 100%; width: 100%"
+  >
+    <div id="left" class="col-sm-12 col-md-3 no-margin">
+      <div class="container">
+        <form method="post" class="" autocomplete="off">
+          {% csrf_token %}
+          <h3 align="center">Fill The Form</h3>
+          <div id="origin"><i class="bi bi-geo-alt"></i></div>
+          <div id="destination"><i class="bi bi-pin-map"></i></div>
+          <div>
+          	<label>Select Mode of Transport</label>
+          	<select name="profile" class="form-select">
+          	<option value="walking">Walking</option>
+          	<option value="driving">Driving</option>
+          	<option value="cycling">Cycling</option>
+          </select>
+          </div>
+          <div id="auto"></div>
+          <br />
+          <div class="" style="display: flex;justify-content: end;align-items: center;">
+			<button onclick="goBack();" class="btn btn-outline-danger form-control">
+			<i class="bi bi-arrow-left-short"></i>Back</button>
+			<span style="width: 10px;"></span>
+			<button type="submit" class="btn btn-outline-success form-control"><i class="bi bi-search"></i>Find Route</button>				
+			</div>
+        </form>
+        <br />
+        <!-- <small id="inst" style="display: none">{{data}}</small> -->
+        {% if instructions %}
+        <div class="instructions">
+          <div style="position: relative;max-width: 100%;">
+            <div><span id="distance"></span></div>
+            <div><span id="time"></span></div>
+            <h5 align="center">Instructions</h5>
+            <div id="instructions" style="position: absolute;background-color: #ddd;overflow-y: auto;width: 100%"></div>
+          </div>
+          
+          <div id="user_origin"></div>
+        </div>
+        {% elif errors %}
+        <p align="center" class="paragraph" style="color:red">{{error|safe}}</p>
+        {%endif %}
+      </div>
+    </div>
+    <div id="right" class="col-sm-12 col-md-9 no-margin">
+      <div id="map"></div>
+    </div>
+  </div>
+</main>
+{% endblock content%} 
+{% block script %}
+<script type="text/javascript" src="{% static 'js/autocomplete.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+
+<script type="text/javascript">
+  var mapbox_token = "{{mapbox_token}}";
+  var ps_token = '{{ps_token}}';
+  
+  NvAutoComplete(document.getElementById('origin'),{
+      placeholder: "Enter your origin",
+      name: "origin",
+      label: "Origin",
+      value: "{{origin}}",
+      lb_color: "#000",
+    });
+
+  NvAutoComplete(document.getElementById('destination'),{
+      placeholder: "Enter your origin",
+      name: "destination",
+      label: "Destination",
+      value: "{{destination}}",
+      lb_color: "#000",
+    });
+
+  function goBack(){
+    window.history.back();
+  }
+  var data = null;
+  if('{{method}}' === "GET"){
+
+  }
+  else{
+    // alert({{data|safe}});
+    let dt = '{{data}}' ? {{data|safe}}:null;
+    console.log({dt});
+    console.log(dt);
+    data = dt;
+    var origin_coordinates = {{origin_coordinates|safe}};
+    var destination_coordinates = {{destination_coordinates|safe}};
+    var profile = '{{profile}}';
+    // var data = '{{data}}';
+    // data = JSON.stringify(dt);
+    // console.log({data});
+  }
+    
+</script>
+
+<script type="text/javascript" src="{% static 'js/path/path.js' %}"></script>
+
+
+{% endblock script %}

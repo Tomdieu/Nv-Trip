@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Find My Self |</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static  "css/styles.css" %}" />
+    <script defer src={% static "js/map/map.js" %}>
+    </script>
+  </head>
+  <body>
+    <div id="floating-panel">
+      <div>
+        <div>
+          <input type="text" id="from" placeholder="Origin" />
+        </div>
+      </div>
+      <div>
+        <div>
+          <input type="text" id="to" placeholder="Destination" />
+        </div>
+      </div>
+      <div>
+        <b>Travel Mode</b>
+        <select id="mode">
+          <option value="DRIVING">Driving</option>
+          <option value="WALKING">Walking</option>
+          <option value="BICYCLING">Bicycling</option>
+          <option value="TRANSIT">Transit</option>
+        </select>
+      </div>/m
+    </div>
+
+    <div id="map"></div>
+
+    {% comment %} <script src="https://maps.googleapis.comaps/api/js?key=AIzaSyDbIZmYDOam2OTHQXhgLVTLrTQbIgusqv0&libraries=places"></script> {% endcomment %}
+    
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCckPiiW1xyC4cycsJZ2j_WSw7FOqf_Obk&libraries=places&callback=initMap&v=weekly"
+      async
+    ></script>
+  </body>
+</html>

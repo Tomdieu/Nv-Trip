@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+  <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+<style type="text/css">
+    *{
+      box-sizing: border-box;
+    }
+    body{
+      border: 0;
+      margin: 0;
+    }
+    .nv-reg{
+      /*display: flex;
+      justify-content: center;
+      align-items: center;*/
+      /*margin: 8px auto;*/
+      border: .5px solid #ddd;
+      padding: 8px;
+      border-radius: 5px;
+      min-width: 30%;
+      /*padding-top: 10px;*/
+    }
+
+    main{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      /*margin-top: 20px;*/
+      width: 100vw;
+      height: 100vh;
+    }
+    @media screen and (max-width: 1000px){
+      .nv-reg{
+        width: 50%;
+      }
+    }
+
+    @media screen and (max-width: 480px){
+      .nv-reg{
+        min-width: 90%;
+      }
+    }
+
+
+    
+  </style>
+</head>
+<body>
+<main>
+	<div class="nv-reg">
+   <form method="post">
+    {% csrf_token %}
+    <img class="mb-4" src="{% static 'icons/map.svg' %}" alt="" width="50%" height="25%" style="display: block;margin-left: auto;margin-right: auto;padding-top: 8px;border-radius: 5px;">
+    <h1 class="h3 mb-3 fw-normal" align="center"><b>Nv Trip Advisor</b></h1>
+    <div class="container">
+      {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+              <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
+              {{message}}
+          </div>
+            {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    <div class="form-floating">
+      <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Email address</label>
+    </div>
+    <br/>
+    <div class="form-floating">
+      <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+      
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <p class="m-0 p-0" align="center">
+    <small class="text-muted">Dont have an account ? </small><a class="link" href="{% url 'register' %}">register</a>
+
+    </p>
+    <p align="center" class="mt-2 mb-3 text-muted">&copy; 2017–{{year}}</p>
+  </form> 
+  </div>
+</main>
+  <script type="text/javascript" src="{% static 'boot/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

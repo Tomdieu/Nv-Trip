@@ -1,0 +1,42 @@
+<script>
+    var deleteAccount = document.querySelector('#deleteAccount');
+
+    var deleteAccountForm = document.querySelector('#deleteAccountForm');
+
+    var btncloseModal = document.querySelector('#closeModal');
+    var statusMsg = document.querySelector('#status');
+
+    deleteAccount.addEventListener('click',async (e)=>{
+        e.preventDefault();
+        deleteAccount.classList.add('btnspn');
+        deleteAccount.setAttribute('disabled',true);
+
+        var formData= new FormData(deleteAccountForm);
+
+        let url = "{% url 'user:delete_account' %}";
+
+        var response = await fetch(url,{
+            method:'POST',
+            body:formData
+        });
+
+        var data = await response.json();
+
+        if(response.status == 200){
+            console.log(data);
+
+            if(data['deleted']==true){
+                deleteAccount.classList.remove('btnspn');    
+                statusMsg.className = 'alert alert-info';
+                statusMsg.innerHTML = 'Account Deleted Successfully!';
+                btncloseModal.remove();
+                deleteAccount.remove();
+                setTimeout(function(){
+                    window.location = '{% url "index" %}';
+                },2000);
+
+            }
+        }
+
+    });
+</script>

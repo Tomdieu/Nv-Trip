@@ -1,0 +1,62 @@
+{% load static %}
+<nav class="navbar-expand-lg navbar navbar-dark bg-dark shadow fixed-top">
+  <div class="container p-2">
+    <a class="navbar-brand" href="#"><b>Nv Trip Advisor</b>
+      <!-- <img src="{% static 'images/images2.jpeg' %}" alt="logo image"> -->
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <!-- <li class="nav-item"><a class="nav-link" href="#">Tontine</a></li> -->
+        {% if user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'user:user_index' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'user:user_notifications' %}">Notification <sup><span class="badge badge-light bg-dark" id="msg">0</span></sup></a></li>
+        {% comment %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Tontine
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="#">Afficher Les Tontine</a></li>
+          </ul>
+        </li>
+        
+        <li class="nav-item"><a class="nav-link" href="{#">Profile</a></li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            Notification🔔 <span class="badge badge-light bg-dark" id="msg"></span>
+          </a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'user:logout' %}">Logout</a></li>
+        {% endcomment %}
+        
+        {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'user:logout' %}">Logout</a> {% endcomment %}
+        {% else %}
+        <li class="nav-item"><a class="nav-link" href="#">Login</a>
+        <li class="nav-item"><a class="nav-link" href="#">Register</a>
+        </li>
+        {% endif %}
+        
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Accounts
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="{% url 'user:profile' %}"><span><img width="24px" src="{% static 'logo/icons8-user-90.png' %}"/></span>Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'user:settings' %}"><span><img src="{% static 'logo/settings_black_24dp.svg' %}"/></span>Settings</a></li>
+            <hr/>
+            <li><a class="dropdown-item" href="{% url 'user:logout'%}"><span><img src="{% static 'svg/log-out.svg' %}"/></span>Logout</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

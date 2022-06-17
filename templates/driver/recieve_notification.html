@@ -1,0 +1,33 @@
+<script>
+    var driveWsUrl = 'ws://' + window.location.host + '/drivernotifications/{{drive.id}}/';
+
+    var driveWs = new WebSocket(driveWsUrl);
+
+    var notifications = document.querySelector('#notifications');
+    var count = 0;
+
+    var notifications_count = document.querySelector('#notifications_count');
+
+    driveWs.onmessage = (e) => {
+        var dt = JSON.parse(e.data);
+        console.log(dt);
+        console.log(e);
+        if (dt.type == 'book_place') {
+            var btn = `onclick = "acceptBook(${dt.message['user_id']},${dt.message['bookedId']},${dt.message['vehicleId']})"`;
+            var msg = `<div class="shadow p-3">
+                    The Passenger ${dt.message['user']} Wants to book ${dt.message['numberOfPlace']} places
+                    In your vehicle going from ${dt.message['origin']} to ${dt.message['destination']}
+                    Willing to pay ${dt.message['price']} from ${dt.message['paymentOption']}
+                    <div id='book_${dt.message['bookedId']}' style="display:flex;justify-content: space-between;align-items: center;">
+                    <button ${btn} class='btn btn-outline-success'>Accept</button>
+                    <button class='btn btn-outline-danger'>Refuse</button>
+                    </div>
+                </div>`;
+            notifications.insertAdjacentHTML('beforeend', msg);
+            count +=1;
+            notifications_count.innerText = count;
+
+        }
+    }
+
+</script>

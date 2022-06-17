@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nv Trip Advisor</title>
+  <link rel="icon" href="{% static 'logo/logo.ico' %}"/>
+	<link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+</head>
+<body>
+		{% include "navbar.html" %}
+
+	<main style="padding-top: 70px;">
+		<div class="container p-3" >
+			{% if messages %}
+				    {% for message in messages %}
+				      <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+  						{{message}}
+							</div>
+				    {% endfor %}
+			{% endif %}
+		</div>
+    
+		<div class="container">
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+				<div class="col">
+          <div class="card shadow-sm">
+          	<div class="card-img-top">
+						 	<center>
+						 		
+						 	<img src="{% static 'icons/compass.svg' %}" style="width: 80%;padding-top: 3px;">
+						 	</center>
+						 </div>
+            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Hello World</text></svg>
+ -->
+            <div class="card-body">
+              <p class="card-text text-center">Determine the path between two places</p>
+              <!-- <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div> -->
+            </div>
+            <div class="card-body">
+            	<center>
+            		<a href="{% url 'user:path' %}" class="btn btn-outline-dark btn-lg" style="width: 100%;padding-top: 3px;">Go</a>
+            	</center>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Hello World</text></svg>
+ -->
+						 <div class="card-img-top">
+						 	<center>
+						 		
+						 	<img src="{% static 'icons/speedometer.svg' %}" style="width: 80%;padding-top: 3px;">
+						 	</center>
+						 </div>
+            <div class="card-body">
+              <p class="card-text" align="center">Book a place in a vehicle</p>
+              <!-- <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div> -->
+            </div>
+            <div class="card-body">
+            	<center>
+            		<a href="{% url 'user:choose' %}" class="btn btn-outline-dark btn-lg" style="width: 100%;">Go</a>
+            	</center>
+            </div>
+          </div>
+        </div>
+
+        {% if request.user.user_type == 'DRIVER'%}
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="card-img-top">
+              <center>
+                
+              <img src="{% static 'logo/car.svg' %}" style="width: 80%;padding-top: 3px;">
+              </center>
+             </div>
+            <div class="card-body">
+              <p class="card-text text-center">Find Passengers</p>
+            </div>
+            <div class="card-body">
+              <center>
+                <a href="{% url 'user:driver-choose' %}" class="btn btn-outline-dark btn-lg" style="width: 100%;">Go</a>
+              </center>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="card-img-top">
+              <center>
+                
+              <img src="{% static 'icons/minecart-loaded.svg' %}" style="width: 80%;padding-top: 3px;">
+              </center>
+             </div>
+            <div class="card-body">
+              <p class="card-text text-center">Create Vehicle</p>
+            </div>
+            <div class="card-body">
+              <center>
+                <a href="{% url 'user:create-vehicle' %}" class="btn btn-outline-dark btn-lg" style="width: 100%;">Go</a>
+              </center>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% comment %} <div class="col">
+          <div class="card shadow-sm">
+          	<div class="card-img-top">
+						 	<center>
+						 		
+						 	<img src="{% static 'icons/shop.svg' %}" style="width: 80%;padding-top: 3px;">
+						 	</center>
+						 </div>
+            <div class="card-body">
+              <p class="card-text text-center">Find Schools,Restaurant,Shop arround you</p>
+            </div>
+            <div class="card-body">
+            	<center>
+            		<a href="" class="btn btn-outline-dark btn-lg" style="width: 100%;">Go</a>
+            	</center>
+            </div>
+          </div>
+        </div> {% endcomment %}
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <div class="card-img-top">
+              <center>
+                
+              <img src="{% static 'icons/cloud-sun.svg' %}" style="width: 80%;padding-top: 3px;">
+              {% comment %} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="m20.772 10.155-1.368-4.104A2.995 2.995 0 0 0 16.559 4H7.441a2.995 2.995 0 0 0-2.845 2.051l-1.368 4.104A2 2 0 0 0 2 12v5c0 .738.404 1.376 1 1.723V21a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h12v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2.277A1.99 1.99 0 0 0 22 17v-5a2 2 0 0 0-1.228-1.845zM7.441 6h9.117c.431 0 .813.274.949.684L18.613 10H5.387l1.105-3.316A1 1 0 0 1 7.441 6zM5.5 16a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 5.5 16zm13 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18.5 16z"></path></svg> {% endcomment %}
+              </center>
+             </div>
+            <div class="card-body">
+              <p class="card-text text-center">Weather Report</p>
+            </div>
+            <div class="card-body">
+              <center>
+                <a href="{% url 'wheather' %}" class="btn btn-outline-dark btn-lg" style="width: 100%;">Go</a>
+              </center>
+            </div>
+          </div>
+        </div>
+
+			</div>
+		</div>
+
+	</main>
+
+	<script type="text/javascript" src="{% static 'boot/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

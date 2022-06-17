@@ -1,0 +1,104 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block style %}
+
+<style type="text/css">
+	main{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.container{
+		padding: 8px;
+	}
+	* {
+    box-sizing: border-box;
+  }
+  .to-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .to-abs {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .no-margin {
+    padding: 0;
+    margin: 0;
+  }
+</style>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/autocomplete.css' %}"
+/>
+{% endblock style %}
+
+{% block content %}
+<main class='to-abs to-center'>
+    <div class="card shadow">
+      <div class="container">
+        <h2 align="center">Nv <span style="color:#0EDFBF;">Trip</span> Advisor</h2>
+        <h3 align="center">Enter Your Origin And Destination</h3>
+        {% if error %}
+          <div class="alert alert-warning">
+            {{error}}
+          </div>
+        {% endif %}
+        <form method="post" autocomplete="off">
+          {% csrf_token %}
+          <div id="origin"></div>
+          <div id="destination"></div>
+          <div>
+        <label>Select your vehicle</label>
+        <select name="vehicle_id" class="form-select">
+          {% for v in vehicle %}
+            <option value="{{v.id}}">{{v}}</option>
+          {% endfor %}
+        </select>
+      </div>
+          <br/>
+          <div style="display: flex;justify-content: space-between;">
+            <button onclick="goBack()" class="btn btn-outline-danger form-control">Back</button>
+            <span style="width: 20px;"></span>
+            <button class="btn btn-outline-primary form-control">Ok</button>
+          </div>
+      </form>
+      </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+
+{% block script %}
+
+<script type="text/javascript" src="{% static 'js/autocomplete.js' %}"></script>
+<script type="text/javascript">
+  var mapbox_token = "{{mapbox_token}}";
+  var ps_token = '{{ps_token}}';
+  NvAutoComplete(document.getElementById('origin'),{
+      placeholder: "Enter your origin",
+      name: "origin",
+      label: "Origin",
+      value: "{{destination}}",
+      lb_color: "#000",
+    });
+  NvAutoComplete(document.getElementById('destination'),{
+      placeholder: "Enter your destination",
+      name: "destination",
+      label: "Destination",
+      value: "{{destination}}",
+      lb_color: "#000",
+    });
+  function goBack(){
+    window.history.back();
+  }
+</script>
+{% endblock script %}

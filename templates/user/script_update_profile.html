@@ -1,0 +1,73 @@
+<script>
+
+var updateProfle = document.querySelector('#updateProfle');
+
+var formUpdate = document.querySelector('#formUpdate');
+
+var span = formUpdate.querySelectorAll('span');
+
+var input = formUpdate.querySelectorAll('[class^=form]');
+
+input.forEach((ele,i)=>{
+    console.log(ele.id);
+    ele.addEventListener('input',()=>{
+        span[i].innerText = '';
+    })
+})
+
+updateProfle.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    var empty = null;
+    input.forEach((ele,i)=>{
+        if(ele.value.length === 0){
+            empty = true;
+            span[i].innerHTML = "Require";
+            span[i].style.color = "red";
+            return;
+        }
+    })
+
+    if(empty === null){
+        updateProfle.classList.add('btnspn')
+        updateProfle.setAttribute('disabled',true)
+        console.log('No errors');
+        console.log(formUpdate)
+        const formData_ = new FormData(formUpdate);
+        input.forEach((ele,i)=>{
+            formData_.append(`${ele.id}`,ele.value);
+            console.log(`${ele.id}`,ele.value);
+        });
+        formData_.append('csrfmiddlewaretoken','{{ csrf_token }}');
+
+        console.log(formData_);
+        console.log(formData_.length);
+
+        var resp = await fetch("{% url 'user:updateUserInfo' %}",{
+            method:'POST',
+            body:formData_
+            }
+        );
+        var data = await resp.json();
+        if(resp.status == 200){
+            console.log(data);
+            
+            setTimeout(function(){
+                updateProfle.classList.remove('btnspn')
+            updateProfle.removeAttribute('disabled')
+            },2000);
+            setTimeout(function(){
+                if(data['updated']==true){
+                window.location.reload();
+            }
+            },1000);
+        }
+        
+
+    }
+    else{
+        console.log('errors')
+        return;
+    }
+})
+
+</script>

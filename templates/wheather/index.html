@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Weather</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/wheather.css' %}">
+        <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+        {% comment %} <link rel="stylesheet" href="{% static 'css/icons/.css' %}"> {% endcomment %}
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="left">
+                <div class="top">
+                    {% comment %} <form method="post" autocomplete="off">
+                        <div class="input">
+                            <label>Type A Location</label>
+                            <input type='enter a location' placeholder="Enter The Place You" />
+                        </div>
+                    </form> {% endcomment %}
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                    <div class="wrapper">
+                        <div class="search-input">
+                            <input class='place' type="text" placeholder="Type to search ..." />
+                            <div class="autocom-box">
+                                {% comment %} <li>Place</li>
+                                <li>Place</li>
+                                <li>Place</li>
+                                <li>Place</li>
+                                <li>Place</li> {% endcomment %}
+                            </div>
+                            {% comment %} <div class="icon"></div> {% endcomment %}
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class='bottom'>
+                    {% comment %} <div class='bctn'>
+                        
+                    </div> {% endcomment %}
+                    <button onclick="window.history.back()">Back</button>
+                </div>
+            </div>
+            <div class="right" id="map"></div>
+        </div>
+        <script>
+            var mapbox_token = '{{mapbox_token}}';
+            var ps_token = '{{ps_token}}';
+        </script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+
+        {% comment %} <script src="{% static 'js/autocomplete.js' %}" async defer></script> {% endcomment %}
+
+        <script src="{% static 'js/wheather.js' %}" async defer></script>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<script>
+    function sendNotif(type,idUser,idBook,vehicleId,notification_id){
+        console.log(type,idUser,idBook,vehicleId,notification_id);
+        var div = document.querySelector(`#book_${idBook}`);
+        console.log(div);
+        div.remove();
+
+        var sk = 'ws://' + window.location.host + `/usernotifications/${idUser}/`;
+        
+        var socket = new WebSocket(sk);
+      socket.onmessage = (e) =>{
+        console.log('message ',e);
+      }
+      socket.onopen= (e) =>{
+        console.log('open ',e);
+        let msg =JSON.stringify({
+          type:type,
+          idUser:idUser,
+          idBook:idBook,
+          vehicleId:vehicleId,
+          notification_id:notification_id
+      });
+      console.log(msg);
+        socket.send(msg);
+      }
+      socket.onerror= (e) =>{
+        console.log('error ',e);
+      }
+      socket.onclose= (e) =>{
+        console.log('close ',e);
+      }
+    }
+    
+    function acceptBook(idUser,idBook,vehicleId,notification_id){
+        console.log(idUser,idBook,vehicleId);
+        sendNotif('book_accepted',idUser,idBook,vehicleId,notification_id);
+    }
+    
+    function rejectBook(idUser,idBook,vehicleId,notification_id){
+        sendNotif('book_reject',idUser,idBook,vehicleId,notification_id);
+    }
+</script>

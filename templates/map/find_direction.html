@@ -1,0 +1,68 @@
+{% extends "map/base.html" %} 
+{% load static %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+  type="text/css"
+/>
+<link href="{% static 'css/map/find_directions.css' %}" rel="stylesheet">
+{% comment %} geocoder StyleSheet {% endcomment %}
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+{% endblock styles %} 
+{% block content %} 
+<div class="container">
+    <div class="header">
+      <div>
+        <h1>Nv Locator</h1>
+      </div>
+      <div id="search">
+        {% comment %} <input placeholder="Search Places" /> {% endcomment %}
+      </div>
+    </div>
+    <div class="main">
+        <div class="left">
+          <div style="width:100%;background-color:red">
+              <form method="post">
+                {% csrf_token %}
+                <p align="center">
+                <div id="origin"></div>
+                </p>
+                <p align="center">
+                  <div id="destination"></div>
+                </p>
+                <p align="center">
+                <button>Find Directions</button>
+                </p>
+                
+              </form>
+              {% comment %} <select id="places-select" style="left: 20px; top: 20px; position: absolute; font-size: 16px; padding: 4px 8px">
+      <option value="">Choose a category...</option>
+      <option value="Coffee shop">Coffee shops</option>
+      <option value="Gas station">Gas stations</option>
+      <option value="Food">Food</option>
+      <option value="Hotel">Hotels</option>
+      <option value="Parks and Outdoors">Parks and Outdoors</option>
+    </select> {% endcomment %}
+          </div>
+          <div class="instructions">
+          </div>
+        </div>
+        <div id="map"></div>  
+    </div>
+</div>
+{% endblock content %} 
+{% block script  %}
+<script>
+  let token = '{{token}}';
+</script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+{% comment %} Geocoder Script {% endcomment %}
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+
+{% comment %} ArcGis Api {% endcomment %}
+<script src="https://unpkg.com/@esri/arcgis-rest-request@4.0.0/dist/bundled/request.umd.js"></script>
+<script src="https://unpkg.com/@esri/arcgis-rest-geocoding@4.0.0/dist/bundled/geocoding.umd.js"></script>
+
+
+<script src="{% static "js/map/find_direction.js" %}"></script>
+{% endblock script %}

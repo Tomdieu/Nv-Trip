@@ -1,0 +1,142 @@
+:root{
+	--primary-color: rgb(11,78,179);
+}
+
+*,
+*::before,
+*::after{
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html,body{
+    padding: 0;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
+    color:white;
+    padding:10px;
+    font-size: 1em;
+    height: 10vh;
+}
+
+.header input{
+    font-size: 1.2em;
+    padding:8px;
+}
+.main{
+    min-height: 90vh;
+    width: 100%;
+    background-color:rgb(191, 255, 191);
+    display:flex;
+}
+
+.container{
+    width: 100%;
+    min-height:100vh;
+    padding:0;
+    margin:0;
+    top:0;
+    left:0;
+    bottom: 0;
+    position: absolute;
+}
+
+
+#map{
+    min-width:75%;
+    min-height: 100%;
+    background-color: aquamarine;
+    float: left;
+}
+
+button{
+    padding: 0.75em;
+    background-color:var(--primary-color);
+    color:white;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transform: all 255s ease-in-out;
+    font-size: 1em;
+}
+
+button:active{
+    transform: scale(0.98);
+}
+
+button:hover{
+    box-shadow: 0 0 0 2px #fff,0 0 0 3px var(--primary-color);
+}
+
+
+.left{
+    width:25%;
+    background-color:red;
+    height:100%;
+    float:left;
+}
+
+form{
+    padding:8px;
+}
+
+#origin,#destination{
+    width:100%;
+    margin:2px;
+}
+
+.mapboxgl-ctrl-geocoder {
+min-width: 100%;
+}
+
+/* /* #search{
+    padding:2px;
+    width:100%;
+} */
+
+#search .mapboxgl-ctrl-geocoder--input{
+    width:100%;
+    padding-left: 30px;
+} 
+
+.mapboxgl-ctrl-geocoder.mapboxgl-ctrl{
+    width:100%;
+}
+
+.mapboxgl-ctrl-geocoder--input{
+    padding:2px;
+    margin:2px;
+}
+
+
+
+@media screen and (max-width:700px) {
+    .header,.header>div{
+        display:block;
+        width:100%;
+    }
+    #search{
+        width:100%;
+        display:block;
+    }
+    .main{
+        display:block;
+        
+    }
+    .left{
+        min-height: fit-content;
+        padding:2px;
+        display:block;
+        width:100%;
+    }
+    #map{
+        width:100%;
+        display:block;
+        height:100vh;
+    }
+}

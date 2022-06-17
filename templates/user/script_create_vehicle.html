@@ -1,0 +1,98 @@
+<script>
+    var modal1 = document.querySelector('#modal1');
+    var createVehicle = document.querySelector('#createVehicle');
+    var vehicleForm = document.querySelector('#vehicleForm');
+    var msgVeh = document.querySelector('#msgVeh');
+
+    var inputListsId = [];
+    var inputListsNames = [];
+
+
+    var divs = vehicleForm.querySelectorAll("[class^='form']");
+    // var divs = vehicleForm.querySelectorAll('.requiredField');
+
+    divs.forEach((ele,i)=>{
+        var div = ele.querySelector('div');
+        // console.log(div.firstChild.nextElementSibling)
+        inputListsNames.push(div.firstChild.nextElementSibling.name)
+        inputListsId.push(`#${div.firstChild.nextElementSibling.id}`);
+    });
+    var inputs = [];
+    inputListsId.map((id)=>{
+        var ele = document.querySelector(id);
+        console.log();
+        inputs.push(ele);
+        var span = document.createElement('span');
+        span.innerText = 'sdsd';
+        ele.parentNode.appendChild(span)
+        // ele.insertAdjacentHTML('afterend',ele);
+
+    })
+
+    inputs.forEach((ele,i)=>{
+        ele.addEventListener('input',(e)=>{
+            let span = ele.nextElementSibling;
+            span.innerText = '';
+            console.log(span);
+        })
+    })
+
+
+    createVehicle.addEventListener('click', async (e)=>{
+        e.preventDefault();
+        var errors = null;
+        inputs.forEach((ele,i)=>{
+            
+            if(ele.value.length == 0){
+                console.log(ele);
+                var nm = ele.name.split('_').join(' ');
+                let span = ele.nextElementSibling;
+                span.innerText = `${nm} require!`;
+                span.style.color='red';
+                console.log(span);
+                errors = true;
+                return;
+            }
+        })
+
+        if(errors==null){
+            console.log('no errors')
+            modal1.classList.add('active');
+            var formData = new FormData(vehicleForm);
+
+            let url = "{% url 'user:create_vehicle' %}";
+            let option = {
+                method:'POST',
+                body:formData
+            }
+            var res = await fetch(url,option);
+            var data = await res.json();
+            if(res.status == 200){
+                console.log(data);
+                modal1.classList.remove('active');
+                if(data['created']==true){
+                    msgVeh.innerHTML = `
+                    <div class="alert alert-success">
+                        Vehicle Created Successfully
+                    </div>
+                    `;
+                    vehicleForm.reset();
+                    setTimeout(function(){
+                        msgVeh.innerHTML = '';
+                    },2000)
+                    window.location.reload();
+                }else{
+                    msgVeh.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${data['error']}
+                    </div>
+                    `;
+                }
+
+            }
+
+        }else{
+            console.log('errors')
+        }
+    });
+</script>

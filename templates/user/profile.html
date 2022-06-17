@@ -1,0 +1,342 @@
+{% include 'base.html' %}
+{% load static  %}
+{% load crispy_forms_tags %}
+
+{% block style %}
+
+{% endblock style %}
+<style>
+    body{
+        margin:0;
+        padding:0;
+        position:relative;
+        width:100vw;
+        height:100vh;
+        max-width:100vw;
+        max-height:100vh;
+        background: linear-gradient(to right, #ddd , #0d6efd)
+    }
+    .nv_modal{
+        position:absolute;
+        width:100%;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        height:100%;
+        /*background-color:rgba(0,0,255,.2);*/
+        background-color: rgba(0, 0, 0, .7);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        display:none;
+    }
+    .nv_modal.active{
+        display:flex;
+    }
+    
+    .nv_modal_content{
+        max-width:700px;
+        padding:10px;
+        box-shadow:0 0 2px 0 #ddd;
+        background-color:#ddd;/*rgba(161, 161, 255, 0.082);*/
+        border-radius:2px;
+    }
+    .nv_modal_content label{
+        font-size: 1em;
+    }
+    .asteriskField{
+        /* content:"*"; */
+        color:red;
+    }
+    .zoom{
+        transition:1s;
+        animation:zoom .5s ease;
+    }
+    @keyframes zoom{
+        from{
+            transform:scale(0);
+        }
+        to{
+            transform:scale(1);
+        }
+    }
+    .center{
+        display: flex;  
+        justify-content: space-around;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+
+    }
+    .left{
+        /* background-image:url('{% static "logo/car.png" %}'); */
+        background-image: url('{% static "logo/car-svgrepo-com.svg" %}');
+        background-repeat:no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        background-size: contain;
+    }
+    .flex{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+    .left,.right{
+        width: 45%;
+    }
+
+    *{
+        transition: all 1s ease;
+    }
+
+    @media screen and (max-width: 700px){
+        .center{
+            display: block;
+            width: 100%;
+        }
+        .left,.right{
+            width: 100%;
+        }
+    }
+    .float-btn{
+        position: absolute;
+        display: flex;
+        width: 100%;
+        padding: 20px;
+        z-index: 99;
+    }
+    .online,.offline{
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: rgb(9, 168, 62);
+        border-radius: 50%;
+        margin-left: 4px;
+        margin-right: 4px;
+    }
+    span.online{
+        color: rgb(103, 226, 103);
+    }
+    span.offline{
+        color: rgb(235, 72, 72);
+    }
+    .offline{
+        background-color: red;
+    }
+    form{
+        display:flex;
+        gap:10px;
+        padding:30px;
+    }
+
+    form label:after{
+        content:"*";
+        color:red;
+    }
+/* 
+    @media screen and (max-width:400px){
+        flex-direction:column;
+    } */
+    button{
+        position:relative;
+    }
+    .btnspn{
+        display: flex;
+        justify-content:center;
+        align-items: center;
+    }
+    .btnspn::after{
+        content:"";
+        display:block;
+        width:20px;
+        height:20px;
+        border-radius:50%;
+        margin-left: 4px;
+        border:2px solid transparent;
+        border-top-color:#fff;
+        animation:rotate 1s ease infinite;
+    }
+
+    @keyframes rotate{
+        from{
+            transform:rotate(0turn);
+        }
+        to{
+            transform:rotate(1turn);
+        }
+    }
+    
+    .ctr{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .input label{
+        color: rgb(0, 0, 0);
+        font-weight: bold;
+    }
+    .left{
+        color: #fff;
+        font-weight: 900;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>
+{% block content %}
+<main class="main">
+
+    <div class="float-btn">
+        <button class="btn btn-primary" onclick="window.history.back()"><i class="bi bi-arrow-left-short"></i>back</button>
+    </div>
+
+    <div class="center">
+        <div class="left">
+            <div class="p-5 shadow">
+                
+                <h5>{{user.user_type}}</h5>
+                <div>
+                    Total Number of place booked Ordered : {{number_of_bookplace_ordered}}
+                </div>
+                <div>
+                    Total Number of Trips order : {{number_of_trips}}
+                </div>
+                <div>
+                    Total Number of book order : {{number_of_bookplace_ordered}}
+                </div>
+                <div>
+                    Total Number of book Accepeted : {{numBookRefuse}}
+                </div>
+                <div>
+                    Total Number of book order : {{numBookAccepted}}
+                </div>
+                <i class='bx bx-square-rounded bx-spin bx-flip-horizontal' ></i>
+
+            </div>
+        </div>
+        <div class="right">
+            <div class="shadow m-2 p-3">
+                <h1>Your Informations</h1>
+                <h5 class="">your are {{user.status}}</h5>
+                <div class="ctr">
+                    <img src="{% static 'logo/icons8-user-90.png' %}" width="100px" height="100px"/>
+                </div>
+                <div class="input">
+                    <label>Username</label>
+                    <input type="text" value="{{user.username}}" class="form-control" disabled />
+                </div>
+                <div class="input">
+                    <label>Email</label>
+                    <input type="text" value="{{user.email}}" class="form-control" disabled />
+                </div>
+                <div class="input">
+                    <label>Phone</label>
+                    <input type="text" value="{{user.phone}}" class="form-control" disabled />
+                </div>
+                <div class="input">
+                    <label>Country</label>
+                    <input type="text" value="{{user.country}}" class="form-control" disabled />
+                </div>
+             
+                <div class="input">
+                    <label>Sex</label>
+                    <input type="text" value="{{user.sex}}" class="form-control" disabled />
+                </div>
+                <div class="input">
+                    <br/>
+                   <button id="updateinfo" class="btn btn-success form-control"><i class="bi bi-arrow-repeat"></i>Update My Informations</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nv_modal">
+        <div class="nv_modal_content zoom">
+            <h1 align="center" style="font-size: 1.4em;margin-top:4px">Update Your Informations</h1>
+            <form method="post" autocomplete="off" style="display:flex;" id="formUpdate">
+                {% csrf_token %}
+                <div>
+                    <div class="">
+                        <label>{{form.first_name.label}}</label>
+                        <input name="first_name" value="{{user.first_name}}" class="form-control"/>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <label>{{form.last_name.label}}</label>
+                        <input type="text" name="last_name" value="{{form.last_name.value}}" class="form-control"/>
+                        <span></span>
+                    
+                    </div>
+                    <div class="">
+                        <label>{{form.username.label}}</label>
+                        <input type="text" name="username" value="{{form.username.value}}" class="form-control"/>
+                        <span></span>
+                    
+                    </div>
+                    <div class="">
+                        <label>{{form.sex.label}}</label>
+                        <select class="form-select" name="sex">
+                            {% for s in user.SEX %}
+                                <option value="{{s.0}}">{{s.1}}</option>
+                            {% endfor %}
+                        </select>
+                        <span></span>
+
+                    </div>
+                    <br/>
+                    
+                </div>
+                <div>
+                    <div class="">
+                        <label>{{form.phone.label}}</label>
+                        <input type="phone" value="{{form.phone.value}}" name="phone" class="form-control"/>
+                        <span></span>
+                        
+                    </div>
+                    <div class="">
+                        <label>{{form.country.label}}</label>
+                        <input type="text" value="{{form.country.value}}" name="country" class="form-control"/>
+                        <span></span>
+                    
+                    </div>
+                    <p>
+                        <div class="flex">
+                            <button id="closeModal" class="btn btn-outline-danger"><i class="bi bi-x"></i>Cancel</button>
+        
+                            <button id="updateProfle" class="btn btn-primary"><i class="bi bi-save"></i>Update</button>
+                        </div>
+                    </p>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</main>
+{% include 'user/script_update_profile.html' %}
+
+{% endblock content %}
+
+{% block script %}
+
+
+<script type="text/javascript">
+    var btnUpdate = document.querySelector('#updateinfo');
+    var modal = document.querySelector('.nv_modal');
+
+    btnUpdate.addEventListener('click',()=>{
+        modal.classList.add('active');
+    })
+
+
+    var closeModal = document.querySelector('#closeModal');
+
+    closeModal.addEventListener('click',(e)=>{
+        e.preventDefault();
+        modal.classList.remove('active');
+    })
+</script>
+
+{% endblock script %}

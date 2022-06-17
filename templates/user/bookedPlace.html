@@ -1,0 +1,187 @@
+{% include 'base.html' %}
+
+
+{% block style %}
+<style>
+
+    body{
+        width:100vw;
+        height:100vh;
+        position:relative;
+    }
+    main{
+        width:100%;
+        height:100%;
+        position:absolute;
+        display:flex;
+        /* justify-content:center; */
+        /* align-items:center; */
+        /* background-color: #c3d3eb; */
+        background-color: rgba(0, 0, 0, 0.808);
+        background-color: rgb(24, 120, 199);
+        
+    }
+    .one,.two,.three{
+        width: 33.33%;
+        height: 100%;
+        overflow-y: auto;
+    }
+    .book{
+        padding:10px;
+        border:1px solid #ddd;
+        box-shadow:0 0 0 3px #ddd;
+        border-radius:2px;
+        width:46%;
+    }
+
+    .book:hover{
+        transform: scale(1.02);
+    }
+    
+    .books{
+        padding:10px;
+        display:flex;
+        gap:10px;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        max-width:600px;
+        overflow-y:auto;
+    }
+    .center{
+        position:relative;
+        display:block;
+        width:100%;
+        height:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        max-width:700px;
+        /* box-shadow:0 0 0 3px #c6c8d8; */
+    }
+    .em{
+        font-size: .9em;
+    }
+    .ctr{
+        display: flex;
+        margin: 5px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        align-items: center;
+        justify-content: center;
+        line-height: 50px;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+    .ctr:active{
+        transform: scale(.9);
+    }
+</style>
+{% endblock style %}
+
+
+{% block content %}
+
+<main> 
+    
+    <div class="one">
+        <button class="btn btn-success ctr" onclick="window.history.back()">&leftarrow;</button>
+        <div class="">
+            <h1 align="center" style="color:#fff">Places Booked</h1>
+            <div class="books">
+                {% for book in userbookplace %}
+                    <div class="book bg-dark text-light">
+                        <div class="em">
+                            From : {{book.origin}}
+                        </div>
+                        <div class="em">
+                            To : {{book.destination}}
+                        </div>
+                        <div class="em">
+                            Price : {{book.price}}
+                        </div>
+                        <div class="em">
+                            Number of place : {{book.number_of_place}}
+                        </div>
+                        <div class="em">
+                            Payement option : {{book.payment_option}}
+                        </div>
+                        <div class="em">
+                            Date : {{book.place_date}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="two">
+        <div class="">
+            <h1 align="center" style="color:#fff">Book Accepted</h1>
+            <div class="books">
+                {% for book in usertransport %}
+                    <div class="book bg-dark text-light">
+                        <div class="em">
+                            From : {{book.booked.origin}}
+                        </div>
+                        <div class="em">
+                            To : {{book.booked.destination}}
+                        </div>
+                        <div class="em">
+                            Price : {{book.booked.price}}
+                        </div>
+                        <div class="em">
+                            Number of place : {{book.booked.number_of_place}}
+                        </div>
+                        <div class="em">
+                            Payement option : {{book.booked.payment_option}}
+                        </div>
+                        <div class="em">
+                            Date : {{book.booked.place_date}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="three">
+        <div class="">
+            <h1 align="center" style="color:#fff">Book Refuse</h1>
+            <div class="books">
+                {% for book in userrefusetransport %}
+                    <div class="book bg-dark text-light">
+                        <div class="em">
+                            From : {{book.booked.origin}}
+                        </div>
+                        <div class="em">
+                            To : {{book.booked.destination}}
+                        </div>
+                        <div class="em">
+                            Price : {{book.booked.price}}
+                        </div>
+                        <div class="em">
+                            Number of place : {{book.booked.number_of_place}}
+                        </div>
+                        <div class="em">
+                            Payement option : {{book.booked.payment_option}}
+                        </div>
+                        <div class="em">
+                            Date : {{book.booked.place_date}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+
+{% block script %}
+
+
+{% endblock script %}

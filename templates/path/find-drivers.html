@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style%}
+<style type="text/css">
+	body{
+    position:relative;
+    overflow: hidden;
+  }
+  <!-- main{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	} -->
+  main{
+    height: 100vh;
+    margin:100px auto;
+    max-width: 600px;
+    overflow-y: auto;
+    margin:0px;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    {% comment %} background-color: rgb(21, 117, 226); {% endcomment %}
+  }
+	.container{
+		padding: 8px;
+	}
+	* {
+    box-sizing: border-box;
+  }
+  <!-- .to-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .to-abs {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+   -->
+  .no-margin {
+    padding: 0;
+    margin: 0;
+  }
+  .bkl{
+    display:flex;justify-content:space-between
+  }
+  .modal{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-color:rgba(0,0,0,.8)
+  }
+<!-- 
+  @media screen and (max-width:500px) {
+    .to-center{
+      display: block;
+    }
+    .to-abs{
+      position:relative;
+    }
+  } -->
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="modal"></div>
+<main class="">
+	<div class="container" style="max-width: 400px;">	
+    <div>
+      
+      {% if drivers_availabel %}
+      <h4 align="center">Available Drivers & Vehicles </h4>
+      <h5>Going From</h5>
+      <h5>Origin : {{booked.origin}}</h5>
+      <h5>Destination : {{booked.destination}}</h5>
+      {% for i in drivers_availabel %}
+      <div style="padding:5px;border:1px solid #ddd">
+        <div class='bkl'>
+          <div>Vehicle : <b>{{i.vehicle}}</b></div>
+          <div>Driver : <b>{{i.vehicle.user}}</b></div>
+        </div>
+        <div class="bkl">
+          <div>
+            Vehicle Type : <b>{{i.vehicle.car_type}}</b>
+          </div>
+          <div>
+            Vehicle Brand : <b>{{i.vehicle.car_brand}}</b>
+          </div>
+        </div>
+        <div>Going </div>
+        <div  class='bkl'>
+          <div>From : <b>{{i.origin}}</b></div>
+        <div>To   : <b>{{i.destination}}</b></div>
+        </div>
+        <div>Available Places : {{i.vehicle.nbp}}</div>
+        <button class="btn btn-primary" onclick="bookedPlace({{i.vehicle.id}},{{booked.id}},{{booked.number_of_place}},'{{booked.payment_option}}',{{booked.price}},'{{booked.user}}','{{i.origin}}','{{i.destination}}')">Reserver</button>
+      </div>
+    {% endfor %}
+    {% else %}
+    <h4 align="center" class="alert alert-info">No Vehicles Available For that destination</h4>
+      <h5>Origin : {{booked.origin}}</h5>
+      <h5>Destination : {{booked.destination}}</h5>
+      {% endif %}
+    </div>
+    <div class="m-3 bkl">
+      <button class="btn btn-outline-dark" onclick='goBack()'><i class="bi bi-arrow-left-short"></i>Back</button>
+      <button class="btn btn-outline-success">Update</button>
+    </div>
+	</div>
+  <script>
+    function goBack(){
+      window.history.back();
+    }
+
+
+    function bookedPlace(vehicleId,bookedId,numberOfPLace,paymentOption,price,user,origin,destination){
+      var dloc = window.location;
+      
+      var wsStart_ = 'ws://'+window.location.host+'/drivernotifications/'+vehicleId+'/';
+      
+      if(dloc.protocole == 'https:'){
+        wsStart_ = 'wss://'+window.location.host+'/drivernotifications/'+vehicleId+'/';
+      }
+      var endpoint = wsStart_;
+      
+      var socket = new WebSocket(endpoint);
+      socket.onmessage = (e) =>{
+        console.log('message ',e);
+      }
+      socket.onopen= (e) =>{
+        console.log('open ',e);
+        let msg = {
+          vehicleId:vehicleId,
+          user:user,
+          user_id:{{request.user.id}},
+          numberOfPlace:numberOfPLace,
+          bookedId:bookedId,
+          paymentOption:paymentOption,
+          price:price,
+          type:'BookPlace',
+          origin:origin,
+          destination:destination
+        };
+
+        var s = JSON.stringify(msg);
+        console.log(msg);
+        console.log(s)
+        socket.send(s);
+      }
+      socket.onerror= (e) =>{
+        console.log('error ',e);
+      }
+      socket.onclose= (e) =>{
+        console.log('close ',e);
+      }
+      
+    }
+  </script>
+</main>
+
+{% endblock content %}
+
+
+{% block script %}
+
+{% endblock script %}

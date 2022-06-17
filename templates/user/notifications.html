@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+{% block style %}
+
+<style type="text/css">
+	body{
+	padding:0;
+	margin:0;
+	max-height: 100vh;
+	width: 100vw;
+	min-width:calc(100vw);
+	height: 100vh;
+}
+
+main{
+	padding:10px;
+	overflow-y: auto;
+	width: 100%;
+	display: flex;
+	/* justify-content: center;
+	align-items: center; */
+	justify-content: center;
+	height: 100%;
+	background-color: rgb(45, 192, 250);
+
+}
+.notifications{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+}
+
+.notif{
+	display:block;
+	padding:10px;
+	/* margin-bottom:4px; */
+	box-shadow:2px 4px 4px 2px #fff;
+	border-radius: 4px;
+	border: 2px solid transparent;
+	--bs-primary:#0d6dfdde;
+	background-color: var(--bs-dark);
+	color: var(--bs-light);
+
+	margin: 4px;
+	max-width:500px;
+}
+*{
+	scroll-behavior: smooth;
+}
+.notif span{
+	display:block;
+}
+
+.False{
+	color: red;
+}
+.True{
+	color: green;
+}
+.flex{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.round{
+	width: 50px;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	box-shadow: 0 0 0 1px #fff;
+	cursor: pointer;
+	animation: glow 1s ease infinite;
+	font-size: 2em;
+	position: relative;
+}
+.round::after{
+	position: absolute;
+	content: "back";
+	font-size: .5em;
+	/* width:10px;
+	height: 10px;
+	background-color: blue; */
+}
+
+@keyframes glow {
+	0%{
+		box-shadow: 0 0 0 1px #fff,0 0 0 0 transparent;
+
+	}
+	10%{
+		box-shadow: 0 0 0 2px #fff,0 0 0 0 transparent;
+
+	}
+	20%{
+		box-shadow: 0 0 0 3px #fff,0 0 0 1px transparent;
+
+	}
+	30%{
+	box-shadow: 0 0 0 4px #fff,0 0 0 2px transparent;
+
+	}
+	40%{
+	box-shadow: 0 0 0 7px #fff,0 0 0 3px transparent;
+
+	}
+	50%{
+	box-shadow: 0 0 0 4px transparent,0 0 0 6px #fff;
+
+	}
+}
+
+.round:active{
+	transform: scale(.89);
+}
+
+@media screen and (max-width:500px){
+	.main,main{
+		width:100vw;
+		min-width:calc(100vw - 10px);
+		position:relative;
+	}
+	.round{
+		left:20px;
+	}
+	.main{
+		min-width:calc(100vw - 30px);
+	}
+	.notif{
+		width:calc(100vw - 30px);
+	}
+	.notifications{
+		display:block;
+	}
+}
+</style>
+
+
+
+{% endblock style %}
+
+
+{% block content %}
+
+<main>
+	<div>
+		<button class="btn btn-secondary round" style="position:fixed" onclick="window.history.back()"></button>
+	</div>
+	<div class="main">
+		<h1 align="center">Notifications</h1>
+	<div class="m-4">
+		<div class="notifications">
+			{% if notifications %}
+			{% for notif in notifications %}
+			<div class="notif">
+				<div><h3>From Driver {{notif.sender.user}}</h3> <h4>vehicle {{notif.sender}} </h4></div>
+				<div><b>content</b> : {{notif.msg}}</div>
+				<span style="float:right">{{notif.create}}</span>
+			</div>
+			{% endfor %}
+			{% else %}
+			<h3 class="alert alert-info">No notifications</h3>  
+			{% endif %}
+			
+		</div>
+	</div>
+	<div class="notifications">
+		{% if user.user_type == "DRIVER"  %}
+		<h1>Driver Notifications</h1>
+		
+		{% if drivernotifications %}
+		{% for notif in drivernotifications %}
+		<div class="notif">
+			<span>Vehicle : {{notif.vehicle}}</span>
+			<div class="flex">
+			<span>{{notif.msg}}</span>
+
+				<span>{% if notif.accepted %}
+					<span class="{{notif.accepted}}">Accepted</span>
+					{% else %}
+					<span class="{{notif.accepted}}">Refuse</span>
+				  {% endif %}</span>
+			</div>
+			<span style="float: right;" class="text-muted">{{notif.created}}</span>
+		</div>
+		{% endfor %}
+		{% else %}
+		<h3 class="alert alert-info">No notifications</h3>  
+
+		{% endif %}
+	{% endif %}
+	</div>
+	</div>
+</main>
+
+{% endblock content %}
+
+
+{% block script %}
+
+{% endblock script %}

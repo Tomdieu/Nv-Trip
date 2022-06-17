@@ -1,0 +1,70 @@
+{
+  "type": "FeatureCollection",
+  "query": [11.52053, 3.86477],
+  "features": [
+    {
+      "id": "place.2569970226282928",
+      "type": "Feature",
+      "place_type": ["place"],
+      "relevance": 1,
+      "properties": { "wikidata": "Q3808" },
+      "text": "Yaounde",
+      "place_name": "Yaounde, Centre, Cameroon",
+      "bbox": [11.471786, 3.83548, 11.537704, 3.89748],
+      "center": [11.520526, 3.864768],
+      "geometry": { "type": "Point", "coordinates": [11.520526, 3.864768] },
+      "context": [
+        {
+          "id": "region.11243107687831340",
+          "short_code": "CM-CE",
+          "wikidata": "Q739951",
+          "text": "Centre"
+        },
+        {
+          "id": "country.18733232307268130",
+          "wikidata": "Q1009",
+          "short_code": "cm",
+          "text": "Cameroon"
+        }
+      ]
+    },
+    {
+      "id": "region.11243107687831340",
+      "type": "Feature",
+      "place_type": ["region"],
+      "relevance": 1,
+      "properties": { "short_code": "CM-CE", "wikidata": "Q739951" },
+      "text": "Centre",
+      "place_name": "Centre, Cameroon",
+      "bbox": [
+        10.2309250601938, 3.12103306360487, 13.2473659999523, 6.26028399968965
+      ],
+      "center": [11.52028, 3.86139],
+      "geometry": { "type": "Point", "coordinates": [11.52028, 3.86139] },
+      "context": [
+        {
+          "id": "country.18733232307268130",
+          "wikidata": "Q1009",
+          "short_code": "cm",
+          "text": "Cameroon"
+        }
+      ]
+    },
+    {
+      "id": "country.18733232307268130",
+      "type": "Feature",
+      "place_type": ["country"],
+      "relevance": 1,
+      "properties": { "wikidata": "Q1009", "short_code": "cm" },
+      "text": "Cameroon",
+      "place_name": "Cameroon",
+      "bbox": [8.3496094, 1.651366, 16.191237, 13.080941],
+      "center": [12.2137541551234, 4.80651220617253],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.2137541551234, 4.80651220617253]
+      }
+    }
+  ],
+  "attribution": "NOTICE: © 2022 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+}

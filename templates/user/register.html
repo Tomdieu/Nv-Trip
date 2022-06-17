@@ -1,0 +1,410 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register</title>
+	<link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+	<style type="text/css">
+		.nv-reg{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin: 20px auto;
+			border: 1px solid #ddd;
+			max-width: 500px;
+			padding: 8px;
+			border-radius: 2px;
+			padding-top: 10px;
+			box-shadow: 0 0 0 2px #ddd;
+		}
+		body{
+			position: absolute;
+			width:100vw;
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(12, 146, 235, 0.932);
+		}
+		.split{
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 10px;
+			box-shadow: 0 4px 5x 3px #fff;
+			border-radius: 5px;
+			background-color: var(--bs-dark);
+			color:#fff;
+		}
+		.left,.right{
+			padding: 8px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 5px;
+			flex-direction: column;
+		}
+		.left >div,.right >div{
+			width: 100%;
+		}
+		.flex{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		@media screen and (max-width:480px){
+			.split,body{
+				display: block;
+			}
+			.split{
+				border-radius: 1px;
+			}
+		}
+		body{
+			scroll-behavior: smooth;
+		}
+		#submit{
+			box-shadow: 0 0 0 3px transparent;
+		}
+		#submit:hover{
+			box-shadow: 0 0 0 1px transparent,0 0 0 2px #fff,0 0 0 4px rgb(12, 126, 255);
+		}
+		#submit:active{
+			transform: scale(.9);
+		}
+		.btnspn{
+        display: flex;
+        justify-content:center;
+        align-items: center;
+    }
+    .btnspn::after{
+        content:"";
+        display:block;
+        width:20px;
+        height:20px;
+        border-radius:50%;
+        margin-left: 4px;
+        /* border:2px solid transparent; */
+		border: 2px solid rgba(255, 255, 255, 0.295);
+        border-top-color:#fff;
+        animation:rotate 1s ease infinite;
+    }
+
+    @keyframes rotate{
+        from{
+            transform:rotate(0turn);
+        }
+        to{
+            transform:rotate(1turn);
+        }
+    }
+	</style>
+
+</head>
+<body>
+	<main>
+		<div class="">
+			<div id="msg">
+				<!-- Account Created successfully -->
+			</div>
+			<form method="post" class="split" id="registrationForm">
+				{% csrf_token %}
+				<div class="left">
+					<h1 align="center">Sign Up</h1>
+
+					<div>
+						{{form.first_name.label}}
+						<input type="text" name="{{form.first_name.name}}" class="form-control"/>
+						<span></span>
+					</div>
+					<div>
+						{{form.last_name.label}}
+						
+						<input type="text" name="{{form.last_name.name}}" class="form-control"/>
+						<span></span>
+
+					</div>
+					<div>
+						{{form.username.label}}
+						<input type="text" name="{{form.username.name}}" class="form-control"/>
+						<span></span>
+
+
+					</div>
+					<div>
+						{{form.email.label}}
+						<input type="text" name="{{form.email.name}}" class="form-control"/>
+						<span></span>
+					</div>
+					<div>
+						{{form.sex.label}}
+						<select name="{{form.sex.name}}" class="form-control form-select">
+							<option value="">-----Select your sex------</option>
+							{% for i in user.SEX %}
+							  <option value="{{i.0}}">{{i.1}}</option>
+							{% endfor %}
+						</select>
+						<span></span>
+
+					</div>
+					<div>
+						{{form.phone.label}}
+						<input type="phone" name="{{form.phone.name}}" class="form-control"/>
+						<span></span>
+
+					</div>
+				</div>
+				<div class="right">
+					<div>
+						{{form.country.label}}
+						<input type="text" name="{{form.country.name}}" class="form-control"/>
+						<span></span>
+					</div>
+					<div>
+						{{form.user_type.label}}
+						<select name="{{form.user_type.name}}" class="form-control form-select" style="width: 100%;">
+							<option value="">-----Who Are You ?------</option>
+							{% for i in user.USER_TYPE %}
+							  <option value="{{i.0}}">{{i.1}}</option>
+							{% endfor %}
+						</select>
+						<span></span>
+
+					</div>
+					<div>
+						{{form.password1.label}}
+						<input type="password" name="{{form.password1.name}}" class="form-control"/>
+						<span></span>
+					</div>
+					<div>
+						{{form.password2.label}}
+						<input type="password" name="{{form.password2.name}}" class="form-control"/>
+						<span></span>
+					</div>
+					<div>
+						<p align="center">Already Have an account ? <a href="{% url 'login' %}">Login</a></p>
+
+						<div class="flex">
+						<button class="btn btn-primary">Forgot Password</button>
+						<button class="btn btn-primary" id="submit">Sign Up</button>
+
+						</div>
+					</div>
+					<p align="center" class="mt-0 mb-3 text-muted">&copy; 2017–{{year}}</p>
+				<p align="center" class="mt-0 mb-3 text-muted">Powererd By ivantom</p>
+				</div>
+				
+			</form>
+		</div>
+		
+	</main>
+	<script type="text/javascript" src="{% static 'boot/js/bootstrap.bundle.min.js' %}"></script>
+	<script type="text/javascript">
+
+		function validateEmail(email){
+			var ptn = /([\w-\.]+)@([\w-]+)\.([\w]+)/;
+			if (ptn.test(email)){
+				return true;
+			}
+			return false;
+		}
+
+		function validatePhone(phone){
+			var ptn = /(\+)?(\d+)/;
+			if(ptn.test(phone)){
+				return true;
+			}
+			return false;
+		}
+
+		var submit = document.querySelector('#submit');
+		var registrationForm = document.querySelector('#registrationForm');
+
+		var spans = registrationForm.querySelectorAll('span');
+		var inputs = registrationForm.querySelectorAll('[class^="form-"]');
+		inputs.forEach((ele,i)=>{
+			ele.addEventListener('input',()=>{
+				spans[i].innerHTML = ``;
+			});
+		});
+		submit.addEventListener('click',async (e)=>{
+			e.preventDefault();
+			submit.classList.add('btnspn')
+			var errors = null;
+			inputs.forEach((ele,i)=>{
+				if(ele.value.length===0){
+					var name = ele.name.split('_').join(' ');
+					spans[i].innerHTML = `${name} is require!`;
+					spans[i].style.color = 'red';
+					errors = true;
+			submit.classList.remove('btnspn')
+
+					return;
+				}
+				if(ele.name=='username'){
+					if(ele.value.length < 6){
+						var sp = ele.nextElementSibling;
+						sp.innerHTML = 'username must be atleast 6 characters!';
+					errors = true;
+					submit.classList.remove('btnspn')
+
+						return;
+					}
+				}
+				if(ele.name == 'email'){
+					console.log('email')
+					if(!validateEmail(ele.value)){
+						var sp = ele.nextElementSibling;
+						errors = true;
+						sp.innerHTML = 'invalid email address!';
+			submit.classList.remove('btnspn')
+
+						return;
+					}
+				}
+				if(ele.name == 'phone'){
+					if(!validatePhone(ele.value)){
+						var sp = ele.nextElementSibling;
+						errors = true;
+
+						sp.innerHTML = 'invalid phone number!<br/>it must respect the fomart +2376xxxxxxxx';
+			submit.classList.remove('btnspn')
+						
+						return;
+					}
+				}
+				if(ele.name == 'password1'){
+					if(ele.value.length < 8){
+						spans[i].innerHTML = `The password length should be atleast 8 characters!`;
+						spans[i].style.color = 'red';
+						errors = true;
+			submit.classList.remove('btnspn')
+
+						return;
+					}
+				}
+				if(ele.name=='password2'){
+					if(ele.value != inputs[inputs.length-2].value){
+						// var name = ele.name.split('_').join(' ');
+						spans[i].innerHTML = `The password confirmation does not match the password!`;
+						spans[i].style.color = 'red';
+						errors = true;
+			submit.classList.remove('btnspn')
+
+						return;
+					}
+				}
+			});
+
+			if(errors == null){
+				var emailExist = null;
+				var userNameExist = null;
+				console.log('no errors');
+				var formData = new FormData();
+
+				var username = registrationForm.querySelector('input[name=username]');
+				formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+				formData.append('username',username.value);
+				var option = {
+					method:'POST',
+					body:formData
+				}
+				let url = "{% url 'user:checkUserName' %}";
+
+				var resp = await fetch(url,option);
+				var data = await resp.json();
+
+				console.log(resp);
+
+				if(resp.status == 200){
+					if(data['exist']==true){
+						userNameExist = true;
+					}
+				}
+
+				var email = registrationForm.querySelector('input[name=email]');
+
+				formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+				formData.append('email',email.value);
+				var option = {
+					method:'POST',
+					body:formData
+				}
+				url = "{% url 'user:checkEmail' %}";
+
+				var resp = await fetch(url,option);
+				var data = await resp.json();
+
+				console.log(resp);
+
+				if(resp.status == 200){
+					if(data['exist']==true){
+						emailExist = true;
+					}
+				}
+				console.log(emailExist,userNameExist);
+				if(userNameExist == true && emailExist == null){
+					var sp = username.nextElementSibling;
+					sp.innerHTML = 'This username is already taken!';
+					sp.style.color = 'red';
+			submit.classList.remove('btnspn')
+
+					return;
+				}
+				if(userNameExist == null && emailExist == true){
+					var sp = email.nextElementSibling;
+					sp.innerHTML = 'This email already exists!';
+					sp.style.color = 'red';
+			submit.classList.remove('btnspn')
+
+					return;
+				}
+				if(userNameExist == true && emailExist == true){
+					var sp = email.nextElementSibling;
+					sp.innerHTML = 'This email already exists!';
+					sp.style.color = 'red';
+					var sp1 = username.nextElementSibling;
+					sp1.innerHTML = 'This username is already taken!';
+					sp1.style.color = 'red';
+			submit.classList.remove('btnspn')
+
+					return;
+						
+				}
+				if(userNameExist == null && emailExist == null){
+					submit.setAttribute('disabled',true);
+					var form = new FormData(registrationForm);
+					var opt = {
+						method:'POST',
+						body:form
+					}
+					url = "{% url 'user:createUser' %}";
+
+					var response = await fetch(url,opt);
+
+					var data = await response.json();
+
+					if(response.status == 200){
+						console.log(data);
+						document.querySelector('#msg').innerHTML = 'Account Created Successfully';
+						document.querySelector('#msg').className='alert alert-info';
+						setTimeout(function (){
+							submit.classList.remove('btnspn')
+							window.location = "{% url 'user:user_index' %}";
+						},2000)
+					}
+				}
+			}else{
+				console.log('errors');
+			submit.classList.remove('btnspn')
+
+			}
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Nv Trip</title>
+    <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'icons/bootstrap-icons.css' %}" />
+    <link rel="stylesheet" href="{% static 'box_icons/css/materialdesignicons.min.css' %}" />
+  <link rel="icon" href="{% static 'logo/logo.ico' %}"/>
+    <style>
+      .flx,.ctr{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:8px;
+        margin:0;
+      }
+    </style>
+    {% block style %}
+    {% endblock style %}
+  </head>
+  <body>
+    {% block content %}
+    
+    {% endblock content%} 
+    {% include 'footer.html' %} 
+    {% block script %} {% endblock script %}
+    
+  </body>
+  <script
+      type="text/javascript"
+      src="{% static 'boot/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script>
+      {% if user.is_authenticated %}
+      var loc = window.location;
+      var status = 'online';
+      
+      var wsStart = 'ws://'+window.location.host+'/user/';
+      
+      if(loc.protocole == 'https:'){
+        wsStart = 'wss://'+window.location.host+'/user/';
+      }
+      var endpoint = wsStart;
+      
+      var socket = new WebSocket(endpoint);
+      socket.onmessage = (e) =>{
+        {% comment %} console.log('message ',e); {% endcomment %}
+      }
+      socket.onopen= (e) =>{
+        {% comment %} console.log('open ',e); {% endcomment %}
+        status = 'online';
+        socket.send(status)
+      }
+      socket.onerror= (e) =>{
+        {% comment %} console.log('error ',e); {% endcomment %}
+      }
+      socket.onclose= (e) =>{
+        status = 'offline'; 
+        socket.send(status);
+        {% comment %} console.log('close ',e); {% endcomment %}
+      }
+      
+      function sendOnline(){
+        tatus = 'online';
+        socket.send(status)
+      }      
+
+      setInterval(sendOnline,1000);
+
+      var sk1 = 'ws://' + window.location.host + '/usernotifications/{{user.id}}/';
+      var userWs1 = new WebSocket(sk1);
+
+      userWs1.onmessage = (e)=>{
+        console.log('message recieve : ',e);
+      }
+
+      {% endif %}
+      {% comment %} function httpGetAsync(url, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
+            callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", url, true); // true for asynchronous
+        xmlHttp.send(null);
+    }
+    
+    var url = "https://ipgeolocation.abstractapi.com/v1/?api_key=2ff44e46e6a44e3fb28a6e603fc18e1a"
+    
+    httpGetAsync(url,function(data){
+      console.log(data);
+    }) {% endcomment %}
+
+      {% comment %} var interval = setInterval(sendOnline,2000); {% endcomment %}
+    </script>
+</html>

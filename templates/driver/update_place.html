@@ -1,0 +1,63 @@
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var btn_incr_plac = document.querySelector('#btn_dec_plac');
+    var btn_dec_plac = document.querySelector('#btn_incr_plac');
+    var avail_plac = document.querySelector('#curr_plac');
+    var vehicle_id = {{vehicle.id | safe}};
+    var curr_plac = document.querySelector('#curr_plac');
+    var curr_plac1 = document.querySelector('#curr_plac1');
+
+    function updatePlace(type) {
+
+        var formData = new FormData();
+        formData.append('vehicle_id', vehicle_id);
+        formData.append('type', type);
+        console.log('Type : ' + type);
+        console.log('vehicle Id :' + vehicle_id);
+
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            {% comment %}
+            console.log(this.response); 
+            {% endcomment %}
+            let data = this.response;
+            if (data['updated'] == true) {
+                curr_plac.value = data['fields']['nbp'];
+                curr_plac1.innerText = data['fields']['nbp'];
+            }
+        }
+        let url = "{% url 'user:update-place' %}";
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        xhr.send(formData);
+
+    }
+
+    btn_incr_plac.addEventListener('click', () => {
+        updatePlace('decrease');
+
+    })
+
+    btn_dec_plac.addEventListener('click', () => {
+        updatePlace('increase');
+
+    })
+</script>

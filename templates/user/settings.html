@@ -1,0 +1,210 @@
+{% include 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block style %}
+    {% include 'user/setting_style.html' %}
+{% endblock style %}
+
+
+{% block content %}
+
+<main>
+<div class="main_content">
+    <div class="left bg-light">
+        <div><h5 align="center">Settings</h5></div>
+        <div>
+            <ul>
+                <li><button class="btn btn-outline-primary" onclick='goTo("{% url 'user:profile' %}")'>Profile</button></li>
+                
+                {% if user.user_type == 'DRIVER' %}
+                <li><button class="btn btn-outline-primary" onclick="show(0)">vehicles</button></li>
+                <li><button class="btn btn-outline-primary" onclick="show(1)">Create A Vehicle</button></li>
+                <li><button class="btn btn-outline-primary" onclick="show(2)">Passengers Transported</button></li>
+
+                {% endif %}
+                <li><button class="btn btn-outline-primary" {% if user.user_type == 'DRIVER' %}onclick="show(3)"{% else %}onclick="show(1)"{% endif %} id="chnage_psw">Change Password</button></li>
+
+                <li><button class="btn btn-outline-primary" id="book_place" onclick="window.location = `{% url 'user:placed_book' %}`">Places Book</button></li>
+                <li><button class="btn btn-outline-danger" id="delete_account">Delete Your Account</button></li>
+            </ul>
+            <div class="m-4">
+                <button class="btn btn-outline-secondary" onclick="window.history.back()"><span class="m-1">&leftarrow;</span>Back</button>
+            </div>
+        </div>
+    </div>
+    <div class="right bg-grey">
+        {% if user.user_type == 'DRIVER' %}
+        <div class="opt active">
+            <div>
+                <h1 class="text-light m-5">Your Vehicles</h1>
+            <div class="vehicles">
+                {% for vehicle in vehicles %}
+                <div class="vehicle text-light shadow p-4 bg-dark">
+                    <div  class="flex">
+                        <img src="{% static 'logo/car.png' %}" />
+                    </div>
+                    <div>
+                        <p class="m-0">Driver Plate : {{vehicle.driver_plate_number}}</p>
+                        <p  class="m-0">
+                        Car Color: <span style="color:{{vehicle.car_color}}">{{vehicle.car_color}}</span>
+                        </p>
+                        <p  class="m-0">Max Places : {{vehicle.max_place}}</p>
+                        <p  class="m-0">Vehicle Type : {{vehicle.car_type}}</p>
+                        <p class="m-0">Vehicle Brand : {{vehicle.car_brand}}</p>
+                        <p class="m-0">Status :<span class="{{vehicle.status}}"></span><span clas="{{vehicle.status}}">{{vehicle.status}}</span></p>
+                    </div>
+                    <div class="flex">
+                        <button class="btn btn-success" disabled>Update</button>
+                        <button class="btn btn-danger" disabled>Delete</button>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            </div>
+            </div>
+            
+        </div>
+        <div class="opt">
+            <div class="modal1" id='modal1'>
+                <div class="modal_content">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="shadow p-4 ">
+                <h1 class="text-light m-5">Create A Vehicles</h1>
+                <div id='msgVeh'></div>
+                <div class="text-light">
+                    <form style="z-index:99" method="post" id="vehicleForm" autocomplete="off" action="{% url 'user:create-vehicle' %}">
+                        {% csrf_token %}
+                        {{veh_creation_form|crispy}}
+                        <br/>
+
+                        <div class="flex">
+                            <button class="btn btn-danger">Cancel</button>
+                            <button class="btn btn-success" id='createVehicle'><i class="bi bi-plus-lg"></i>Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% include 'user/script_create_vehicle.html' %}
+        
+        </div>
+        {% endif %}
+        <div class="opt" style="overflow-y:auto">
+            <div class="p-4 ">
+                <h1 class="text-light m-5">Passengers Transported</h1>
+                <div class="text-light">
+                    <div class="vehicles">
+                        {% for i in passengers_transported %}
+                            <div class="vehicle bg-dark p-3"    >
+                                <p>Passenger : {{i.booked.user.username}}</p>
+                                <p>Transported</p>
+                                <p>From {{i.booked.origin}} </p>
+                                <p>To : {{i.booked.destination}}</p>
+                                <p>Vehicle : {{i.vehicle}}</p>
+                                <p>You : {{i.accept}}</p>
+                                <p>Date : {{i.date}}</p>
+                            </div>
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        <div class="opt">
+            <div class="modal1">
+                <div class="modal_content">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="shadow p-4 ">
+                <h1 class="text-light m-5">Change You Password</h1>
+                <div class="text-light">
+                    <div class="alert" id="not"></div>
+                    <form method="post" action="" id="passwordUpdateForm">
+                        {% csrf_token %}
+                        <div>
+                            <label for='password'>Old Password</label>
+                            <input type="password" id="oldpassword" class="form-control"/>
+                            <span class="msg"></span>
+                        </div>
+                        <div>
+                            <label for='password'>New Password</label>
+                            <input type="password" id="password" class="form-control"/>
+                            <span class="msg"></span>
+                            
+                        </div>
+                        <div>
+                            <label for='password'>New Password Confirmation</label>
+                            <input type="password" id="confirmpassword" class="form-control"/>
+                            <span class="msg"></span>
+
+                        </div>
+                        <br/>
+
+                        <div class="flex">
+                            <button class="btn btn-danger" id="cancel"><i class="bi bi-x"></i>Cancel</button>
+                            <button class="btn btn-success" id="updatePsw"><i class="bi bi-save"></i>Update</button>
+                        </div>
+                    </form>
+                    
+                    {% include 'user/script_update_password.html' %}
+                </div>
+            </div>
+        
+        </div>
+</div>
+<div class="nv_modal">
+        <div class="nv_modal_content zoom">
+            <h1 align="center" style="font-size: 1.4em;">Update Your Informations</h1>
+            <form method="post" autocomplete="off" id='deleteAccountForm'>
+                {% csrf_token %}
+                <p id='status'>Do you Really want to delete your account ?</p>
+                <p>
+                <div class="flex">
+                    <button id="closeModal" class="btn btn-outline-danger"><i class="bi bi-x"></i>Close</button>
+
+                    <button class="btn btn-primary" id='deleteAccount'><i class="bi bi-trash"></i>Delete My Account</button>
+                </div>
+                </p>
+            </form>
+            {% include 'user/delete_account_script.html' %}
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    function goTo(url){
+        window.location = url;
+    }
+
+	var btnDelete = document.querySelector('#delete_account');
+    var modal = document.querySelector('.nv_modal');
+
+    
+    btnDelete.addEventListener('click',()=>{
+        modal.classList.add('active')
+    })
+
+    var closeModal = document.querySelector('#closeModal');
+
+    closeModal.addEventListener('click',(e)=>{
+        e.preventDefault();
+        modal.classList.remove('active');
+    })
+
+    var opt = document.querySelectorAll('.opt');
+
+
+    function show(index){
+        opt.forEach((ele,i)=>{
+            ele.classList.remove('active');
+        })
+        opt[index].classList.add('active');
+    }
+</script>
+{% endblock script %}
