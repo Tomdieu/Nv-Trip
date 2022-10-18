@@ -6,8 +6,13 @@ map and calculate the distance and the time
 
 ![logo](https://github.com/Tomdieu/Nv-Trip/blob/main/static/googlemapclone.png)
 
-How to execute this program
+## How to execute this program
 
 install the dependencies using 
-pip -r install requirement.txt
-and later python manage.py runserver
+```
+  pip -r install requirement.txt
+```
+and later 
+```
+  python manage.py runserver
+```
